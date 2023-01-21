@@ -1,0 +1,40 @@
+
+.App{
+    position: relative;
+}
+.container{
+    display: flex;
+    
+
+  
+}
+
+
+.main{
+    flex: 7;
+    background:  #181818;
+    color: white;
+    padding-top: 8px;
+    padding: 12px;
+
+
+}
+.App .container .main.lightTheme{
+    background-color: white;
+    color: black;
+}
+
+
+/* .lighttheme{
+    flex: 7;
+    background-color: white;
+    color: black;
+} */
+
+.App .container .mainpageWrapper{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 15px;
+    margin-top: 25px;
+
+}

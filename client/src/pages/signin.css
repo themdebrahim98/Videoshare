@@ -1,0 +1,59 @@
+.signin{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 150px);
+    width: 100%;
+    font-size: 25px;
+}
+.signin .signinWrapper{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #202020;
+    padding: 2rem;
+    border-radius: 15px;
+    
+}
+.signin .signinWrapper .title{
+    font-size: 25px;
+    font-weight: 800;
+    text-transform: capitalize;
+
+}
+.signin .signinWrapper .subtitle{
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 15px;
+
+}
+.signin .signinWrapper input{
+    color: black;
+    border: none;
+    outline: none;
+    margin-bottom: 8px;
+    border-radius: 15px;
+    padding: 8px;
+
+}
+
+
+.signin .signinWrapper .btn{
+    padding: 8px;
+    border-radius: 15px;
+    width: 85px;
+    cursor: pointer;
+}
+.signin .signinWrapper .btn:hover{
+}
+
+.signin .signinWrapper .googlebtn Button{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: white;
+    color: #202020;
+    margin-top: 8px;
+    font-size: 15px;
+    border-radius: 15px;
+}

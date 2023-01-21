@@ -1,0 +1,56 @@
+.App .container .menu{
+    flex: 1.5;
+    background-color: #202020;
+    color: white;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+   
+}
+
+.App .container .menu.lightTheme{
+    background-color: white;
+    color: black;
+}
+
+.menu .wrapper{
+    padding: 8px 25px;
+    
+   
+}
+
+.menu .logo{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    font-size: 15px;
+}
+.menu .item{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    padding: 15px;
+}
+.menu .btn Button{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+    background-color: transparent;
+
+}
+
+.menu .btn{
+    margin-bottom: 8px;
+}
+
+.item:hover{
+    background-color: gray;
+    transition: background-color .5s ease;
+    border-radius: 15px;
+}
+
