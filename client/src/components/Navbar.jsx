@@ -3,7 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./navbar.css";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Space, Dropdown } from "antd";
+import { Button, Space, Dropdown, message } from "antd";
 import PersonIcon from "@mui/icons-material/Person";
 import { useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
@@ -34,13 +34,19 @@ export default function Navbar() {
     onClick: async () => {
       dispatch(logout());
       // localStorage.removeItem('persist:root')
-      const res = await axios.post(
-        "http://localhost:8800/api/auth/logout",
-        null,
-        { withCredentials: true }
-      );
-      console.log("lout", res);
-      navigate("/signin");
+      try {
+        const res = await axios.post(
+          "http://localhost:8800/api/auth/logout",
+          null,
+          { withCredentials: true }
+        );
+        console.log("lout", res);
+        message.success("logout sucsessfully.")
+        navigate("/signin");
+        
+      } catch (error) {
+        message.error("")
+      }
     },
   };
 

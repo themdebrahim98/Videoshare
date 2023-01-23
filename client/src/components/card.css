@@ -6,6 +6,7 @@ margin-right: 12px;
 margin-bottom: 12px;
 cursor: pointer;
 text-decoration: none;
+position: relative;
 
 
 
@@ -16,6 +17,13 @@ text-decoration: none;
     border-radius: 15px;
     border: 1px solid #202020;
     background-color: #202020;
+    
+}
+
+.card  .bar{
+    position: absolute;
+    top: 5px;
+    right: 8px;
 }
 .card .wrapper img{
     height: 180px;

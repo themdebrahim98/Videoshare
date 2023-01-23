@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
-import Video from '../model/Videos.js'
+import Video from "../model/Videos.js";
 import { createError } from "../error.js";
 import User from "../model/User.js";
-
+import Videos from "../model/Videos.js";
+import Comment from "../model/Comment.js"
 export const updateUSer = async (req, res, next) => {
   try {
     if (req.params.id === req.user.id) {
@@ -25,8 +26,12 @@ export const updateUSer = async (req, res, next) => {
 export const deleteUSer = async (req, res, next) => {
   try {
     if (req.params.id === req.user.id) {
-      const user = await User.findByIdAndDelete(req.params.id, { new: true });
-      res.status(200).json("succsesfully deleted");
+      await User.findByIdAndDelete(req.params.id, { new: true });
+      await Videos.deleteMany({'userId':req.user.id});
+      await Comment.deleteMany({'userId':req.user.id});
+      res.clearCookie("user-token")
+
+      res.status(200).json("succsesfully deleted user and his all data from database");
       next();
     } else {
       next(createError(401, "you can delete only your account!"));
@@ -95,36 +100,32 @@ export const unSubUser = async (req, res, next) => {
 };
 
 export const like = async (req, res, next) => {
-  console.log("like")
+  console.log("like");
   try {
     const id = req.user.id;
-    console.log(id)
+    console.log(id);
     const videoId = req.params.id;
-    await Video.findByIdAndUpdate(
-      videoId,
-      {$addToSet:{likes:id},$pull:{disLikes:id}}
-    )
-    res.status(200).json("video has been liked")
-    
-  }catch (err) {
+    await Video.findByIdAndUpdate(videoId, {
+      $addToSet: { likes: id },
+      $pull: { disLikes: id },
+    });
+    res.status(200).json("video has been liked");
+  } catch (err) {
     next(err);
   }
   // const user = await User.findOne({})
 };
 
 export const disLike = async (req, res, next) => {
-  
   try {
     const id = req.user.id;
     const videoId = req.params.id;
-    await Video.findByIdAndUpdate(
-      videoId,
-      {$addToSet:{disLikes:id},$pull:{likes:id}}
-    )
-    res.status(200).json("video has been disliked")
-    
-  }catch (err) {
+    await Video.findByIdAndUpdate(videoId, {
+      $addToSet: { disLikes: id },
+      $pull: { likes: id },
+    });
+    res.status(200).json("video has been disliked");
+  } catch (err) {
     next(err);
   }
-
 };

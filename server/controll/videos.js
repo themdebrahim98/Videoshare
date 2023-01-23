@@ -76,7 +76,7 @@ export const viewVideo = async (req, res, next) => {
     if (!isView) {
       const updatedvideo = await Videos.findByIdAndUpdate(
         req.params.videoId,
-        { $inc: { views: 1 }, $push: { viedeoViewUsers: req.user.id } },
+        { $addToSet:{viedeoViewUsers:req.user.id} },
         { new: true }
       );
 
@@ -102,7 +102,7 @@ export const trendingVideo = async (req, res, next) => {
   console.log("trend")
   try {
  
-    const trend = await Videos.find().sort({ views: -1 });
+    const trend = await Videos.find().sort({ viedeoViewUsers: -1 });
     res.cookie("ok","kljjkhhjkjkbhjgb")
 
     res.status(200).json(trend);
@@ -146,6 +146,18 @@ export const searchVideo = async (req, res, next) => {
    const searchVideo = await Videos.find({ desc:{$regex:query,$options:"i"}});
 
     res.status(200).json(searchVideo);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+export const channelVideos = async (req, res, next) => {
+  console.log("delete")
+  try {
+    const videos = await Videos.find({userId: req.user.id}).sort({"createdAt":-1});
+    if (!videos) return next(createError(404, "video not found"));
+    res.status(200).json(videos);
   } catch (err) {
     next(err);
   }

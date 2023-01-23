@@ -16,6 +16,8 @@ import { useContext } from "react";
 import { ThemeContext } from "../App.js";
 import { Link } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import {GrChannel} from 'react-icons/gr'
+import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 
 
 
@@ -48,7 +50,7 @@ export default function Menu() {
         </Link>
 
         <Link
-          to="trend"
+          to="video/trend"
           style={{ color: "inherit", textDecoration: "none" }}
           color="inherit"
         >
@@ -59,13 +61,24 @@ export default function Menu() {
         </Link>
 
         <Link
-          to="/sub"
+          to="/video/sub"
           style={{ color: "inherit", textDecoration: "none" }}
           color="inherit"
         >
           <div className="item">
             <SubscriptionsIcon />
             Subscription
+          </div>
+        </Link>
+
+        <Link
+          to="video/allvideos"
+          style={{ color: "inherit", textDecoration: "none" }}
+          color="inherit"
+        >
+          <div className="item">
+            <VideoLibraryIcon />
+            My Own Videos
           </div>
         </Link>
         <hr style={{ margin: "18px 0", border: "1px solid #373737" }} />

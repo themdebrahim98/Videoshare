@@ -1,5 +1,5 @@
 import express from "express"
-import { addVideo, deleteVideo, getVideo, getVideoByTag, randomVideo, searchVideo, subVideo, trendingVideo, updateVideo, viewVideo } from '../controll/videos.js'
+import { addVideo, channelVideos, deleteVideo, getVideo, getVideoByTag, randomVideo, searchVideo, subVideo, trendingVideo, updateVideo, viewVideo } from '../controll/videos.js'
 import { verifyToken } from "../verifytoken.js";
 const router = express.Router();
 
@@ -24,6 +24,9 @@ router.get('/search',verifyToken,searchVideo)
 router.get('/tags',getVideoByTag)
 //subscribed user video
 router.get("/sub",verifyToken,subVideo)
+//channel's all video
+router.get('/allvideos',verifyToken,channelVideos)
+
 
 
 export default router;

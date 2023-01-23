@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./video.css";
 import Card from "../components/Card";
-import { Button, Space, Tooltip } from "antd";
+import { Button, Space, Tooltip,Alert,message } from "antd";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
@@ -23,6 +23,7 @@ import { async } from "@firebase/util";
 import { subscribe } from "../redux/userSlice";
 
 export default function Video() {
+  const [messageApi, contextHolder] = message.useMessage();
   const [channel, setchannel] = useState({});
   const distpatch = useDispatch();
   let { currVideo } = useSelector((state) => state.video);
@@ -31,61 +32,97 @@ export default function Video() {
   const path = useLocation().pathname.split("/")[2];
   console.log(path);
 
+  const warning = () => {
+    message.error("You are not authorized!")
+    
+  };
+
   const handleLike = async (e) => {
-    const res = await axios.put(
-      `http://localhost:8800/api/user/like/${path}`,
-      null,
-      {
-        withCredentials: true,
-      }
-    );
-    distpatch(like( currUser&& currUser._id));
-    console.log(res.data);
+    try {
+      const res = await axios.put(
+        `http://localhost:8800/api/user/like/${path}`,
+        null,
+        {
+          withCredentials: true,
+        }
+      );
+      distpatch(like(currUser && currUser._id));
+      console.log(res.data);
+    } catch (error) {
+      message.warning("You are not authorized!, please sign in to like, comment ");
+    }
   };
 
   const handleDislike = async (e) => {
-    const res = await axios.put(
-      `http://localhost:8800/api/user/dislike/${currVideo._id}`,
-      null,
-      {
-        withCredentials: true,
-      }
-    );
-    distpatch(dislike(currUser&& currUser._id));
-    console.log(res.data);
+    try {
+      const res = await axios.put(
+        `http://localhost:8800/api/user/dislike/${currVideo._id}`,
+        null,
+        {
+          withCredentials: true,
+        }
+      );
+      distpatch(dislike(currUser && currUser._id));
+    } catch (error) {
+      message.warning("You are not authorized!, please sign in to like, comment ");
+
+    }
   };
 
   const handleSubscribe = async (e) => {
-    if (!currUser.subscribedUsers.includes(channel._id)) {
-      let res = await axios.put(
-        `http://localhost:8800/api/user/sub/${channel._id}`,
-        null,
-        {
-          withCredentials: true,
-        }
-      );
-      distpatch(subscribe(channel._id));
-      console.log(res.data);
-    } else {
-      let res = await axios.put(
-        `http://localhost:8800/api/user/unsub/${channel._id}`,
-        null,
-        {
-          withCredentials: true,
-        }
-      );
-      distpatch(subscribe(channel._id));
-      console.log(res.data);
+    try {
+      if (!currUser.subscribedUsers.includes(channel._id)) {
+        let res = await axios.put(
+          `http://localhost:8800/api/user/sub/${channel._id}`,
+          null,
+          {
+            withCredentials: true,
+          }
+        );
+        distpatch(subscribe(channel._id));
+        console.log(res.data);
+      } else {
+        let res = await axios.put(
+          `http://localhost:8800/api/user/unsub/${channel._id}`,
+          null,
+          {
+            withCredentials: true,
+          }
+        );
+        distpatch(subscribe(channel._id));
+        console.log(res.data);
+      }
+    } catch (error) {
+      message.warning("You are not authorized!, please sign in to like, comment ");
     }
   };
+
+  useEffect(() => {
+    const viewVideo = async () => {
+      await axios.put(`http://localhost:8800/api/video/view/${path}`, null, {
+        withCredentials: true,
+      });
+    };
+    console.log("call");
+
+    viewVideo();
+  }, []);
 
   useEffect(() => {
     try {
       const findVideo = async () => {
         distpatch(fetchStart());
+        try {
+          const videoView = await axios.put(
+            `http://localhost:8800/api/video/view/${path}`,
+            null,
+            { withCredentials: true }
+          );
+        } catch (error) {}
         const videoRes = await axios.get(
           `http://localhost:8800/api/video/find/${path}`
         );
+        console.log(videoRes, "video");
         const channelRes = await axios.get(
           `http://localhost:8800/api/user/find/${videoRes.data.userId}`
         );
@@ -97,31 +134,34 @@ export default function Video() {
       console.log(err);
       distpatch(fetchFaliure());
     }
-  }, [path, distpatch,currUser&& currUser.subscribedUsers]);
+  }, [path, distpatch, currUser && currUser.subscribedUsers]);
 
   return (
     <div className="video">
       <div className="videoWrapper">
-        <video controls className="videoFrame"  src={currVideo?.videoUrl}>
+        <video
+          controls
+          className="videoFrame"
+          src={currVideo?.videoUrl}
+        ></video>
 
-        </video>
-       
         <h1 className="title">{currVideo?.title}</h1>
         <div className="details">
-          <div className="info">{`  ${currVideo?.views} views - ${format(
-            currVideo && currVideo.createdAt
-          )}`}</div>
+          <div className="info">{`  ${
+            currVideo?.viedeoViewUsers.length
+          } views - ${format(currVideo && currVideo.createdAt)}`}</div>
           <div className="btngrp">
             <div className="btn" onClick={handleLike}>
-              {currVideo?.likes?.includes(currUser&& currUser._id) ? (
+              {currVideo?.likes?.includes(currUser && currUser._id) ? (
                 <ThumbUpIcon />
               ) : (
                 <ThumbUpOutlinedIcon />
               )}
-              {currVideo&& currVideo?.likes.length}
+              {currVideo && currVideo?.likes.length}
             </div>
             <div className="btn" onClick={handleDislike}>
-              {currVideo&& currVideo.disLikes?.includes(currUser&& currUser._id) ? (
+              {currVideo &&
+              currVideo.disLikes?.includes(currUser && currUser._id) ? (
                 <ThumbDownIcon />
               ) : (
                 <ThumbDownAltOutlinedIcon />
@@ -140,7 +180,7 @@ export default function Video() {
             <div className="info">
               <span className="channelTitle"> {`${channel.name} `}</span>
 
-              <span className="channelCount">{`${channel.subscribers} Subscribes`}</span>
+              <span className="channelCount">{`${channel.subscribers} Subscribers`}</span>
             </div>
           </div>
 
@@ -157,8 +197,8 @@ export default function Video() {
             </Button>
           </div>
         </div>
-        <p className="channelDescription">{currVideo&& currVideo.desc}</p>
-        <Comments  videoId = {currVideo&& currVideo._id}/>
+        <p className="channelDescription">{currVideo && currVideo.desc}</p>
+        <Comments videoId={currVideo && currVideo._id} />
       </div>
       <div className="recommendedWrapper">
         <h1 style={{ margin: "5px 5px" }}>Recommended</h1>

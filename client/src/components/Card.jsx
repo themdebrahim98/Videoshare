@@ -1,23 +1,58 @@
 import React, { useState, useEffect } from "react";
 import "./card.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { format } from "timeago.js";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import blankImg from '../images/blank.jpg'
-
-
-
-
-
-export default function Card({ video }) {
+import blankImg from "../images/blank.jpg";
+import blankUSer from "../images/blankuser.png";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Button, Modal } from "antd";
+import { useNavigate } from "react-router-dom";
+export default function Card({ video,videos,setvideos }) {
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("Are Yyou sure want to delete this video!");
   const [user, setuser] = useState("");
   let { currVideo } = useSelector((state) => state.video);
+  let { currUser } = useSelector((state) => state.user);
 
+  const navigate = useNavigate()
+  const showModal = () => {
+    setOpen(true);
+  };
+  const handleOk = async() => {   
+    setConfirmLoading(true);
+    const res = await axios.delete(`http://localhost:8800/api/video/${video._id}`,{withCredentials:true})
+    console.log("deleetd")
+    navigate('/video/trend')
+    // const getVideos = async ()=>{
+    //   const res = await axios.get(`http://localhost:8800/api/video/trend`,{withCredentials:true})
+    //   console.log(res.data,"data")
+    //   setvideos(res.data)
+    // }
+    // getVideos()
+    if(res.data){
+      setOpen(false);
+      setConfirmLoading(false);
+    }
+    setOpen(false)
+   
+
+    
+
+    
+  };
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpen(false);
+  };
 
   useEffect(() => {
     const getUser = async () => {
-      const res = await axios.get(`http://localhost:8800/api/user/find/${video.userId}`);
+      const res = await axios.get(
+        `http://localhost:8800/api/user/find/${video.userId}`
+      );
       console.log(res.data, "data");
       setuser(res.data);
     };
@@ -25,19 +60,43 @@ export default function Card({ video }) {
   }, [video.userId]);
   return (
     <div className="card">
+      {currUser&& currUser._id == video.userId ? (
+        // <div
+        //   className="bar"
+        //   onClick={() => {
+        //     console.log("sckjn");
+        //   }}
+        // >
+        //   <MoreVertIcon />
+        // </div>
+
+        <div>
+          <MoreVertIcon onClick={showModal} className="bar" />
+          <Modal
+            title="Title"
+            open={open}
+            onOk={handleOk}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+          >
+            <p>{modalText}</p>
+          </Modal>
+        </div>
+      ) : null}
+
       <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
         <div className="wrapper">
           <img
-          style={{objectFit:'cover'}}
-            src={video.imgUrl == "" ? blankImg:video.imgUrl }
+            style={{ objectFit: "cover" }}
+            src={video.imgUrl == "" ? blankImg : video.imgUrl}
             alt=""
           />
           <div className="details">
-            <img src={user.img} alt="" />
+            <img src={user&&( user.img == "" ? blankUSer : user.img)} alt="" />
             <div className="texts">
-              <h1>{video.desc}</h1>
-              <h2>{user.name}</h2>
-              <div className="info">{`${video.views} views - ${format(
+              <h1 style={{ margin: "0" }}>{video.title}</h1>
+              <h2>{user&& user.name}</h2>
+              <div className="info">{`${video.viedeoViewUsers.length} views - ${format(
                 video.createdAt
               )} `}</div>
             </div>

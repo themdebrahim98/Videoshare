@@ -43,15 +43,12 @@
     margin:0 auto;
     font-size: 45px;
 }
+.upload .uploadWrapper .input Search{
+    width: 100%;
+}
 
-.upload .uploadWrapper  input, textarea{
-    border: 1px solid black;
-    padding: 15px;
-    border-radius: 15px;
-    color: white ;
-    outline: none;
-    background-color: transparent;
-    font-size: 18px;
+.upload .uploadWrapper  Input{
+    color: black;
 
 
 }
