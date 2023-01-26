@@ -12,14 +12,27 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { logout } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-
+import MenuIcon from "@mui/icons-material/Menu";
 import Upload from "./Upload";
+import { toggleSideBar } from "../redux/sideBarSlice";
+
+import {Input} from 'antd'
+import { Search } from "react-router-dom";
 
 export default function Navbar() {
   const [open, setopen] = useState(false);
+  const [searchInput, setsearchInput] = useState([])
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { currUser } = useSelector((state) => state.user);
+  let { isopen } = useSelector((state) => state.sideBar);
+  const [q, setq] = useState('');
+
+
+
+  const handleSideBar = (e) => {
+    dispatch(toggleSideBar());
+  };
 
   const items = [
     {
@@ -40,12 +53,10 @@ export default function Navbar() {
           null,
           { withCredentials: true }
         );
-        console.log("lout", res);
-        message.success("logout sucsessfully.")
+        message.success("logout sucsessfully.");
         navigate("/signin");
-        
       } catch (error) {
-        message.error("")
+        message.error("");
       }
     },
   };
@@ -54,21 +65,41 @@ export default function Navbar() {
     <>
       <div className="navbar">
         <div className="wrapper">
+          <div
+            style={{
+              width: "75px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {!isopen ? (
+              <div className="bar" onClick={handleSideBar}>
+                <MenuIcon className="hambarger" />
+              </div>
+            ) : null}
+          </div>
           <div className="search">
+           
             <input
+            onChange={(e)=>setq(e.target.value)}
               type="text"
               name="search"
               id="search"
               placeholder="search heare.."
+              value={q}
             />
-            <div className="searchIcon">
+            <div onClick={()=>navigate(`/video/search?q=${q}`)} className="searchIcon">
               <SearchIcon />
             </div>
           </div>
 
           {currUser ? (
             <div className="user">
-              <VideoCallIcon style={{cursor:"pointer"}} onClick={(e) => setopen(true)} />
+              <VideoCallIcon
+                style={{ cursor: "pointer" }}
+                onClick={(e) => setopen(true)}
+              />
               <Dropdown.Button
                 menu={menuProps}
                 placement="bottom"

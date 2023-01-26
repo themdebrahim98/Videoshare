@@ -9,42 +9,40 @@ import blankUSer from "../images/blankuser.png";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-export default function Card({ video,videos,setvideos }) {
+export default function Card({ video, videos, setvideos }) {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Are Yyou sure want to delete this video!");
+  const [modalText, setModalText] = useState(
+    "Are Yyou sure want to delete this video!"
+  );
   const [user, setuser] = useState("");
   let { currVideo } = useSelector((state) => state.video);
   let { currUser } = useSelector((state) => state.user);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const showModal = () => {
     setOpen(true);
   };
-  const handleOk = async() => {   
+  const handleOk = async () => {
     setConfirmLoading(true);
-    const res = await axios.delete(`http://localhost:8800/api/video/${video._id}`,{withCredentials:true})
-    console.log("deleetd")
-    navigate('/video/trend')
+    const res = await axios.delete(
+      `http://localhost:8800/api/video/${video._id}`,
+      { withCredentials: true }
+    );
+    navigate("/video/trend");
     // const getVideos = async ()=>{
     //   const res = await axios.get(`http://localhost:8800/api/video/trend`,{withCredentials:true})
     //   console.log(res.data,"data")
     //   setvideos(res.data)
     // }
     // getVideos()
-    if(res.data){
+    if (res.data) {
       setOpen(false);
       setConfirmLoading(false);
     }
-    setOpen(false)
-   
-
-    
-
-    
+    setOpen(false);
   };
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setOpen(false);
   };
 
@@ -53,14 +51,13 @@ export default function Card({ video,videos,setvideos }) {
       const res = await axios.get(
         `http://localhost:8800/api/user/find/${video.userId}`
       );
-      console.log(res.data, "data");
       setuser(res.data);
     };
     getUser();
   }, [video.userId]);
   return (
     <div className="card">
-      {currUser&& currUser._id == video.userId ? (
+      {currUser && currUser._id == video.userId ? (
         // <div
         //   className="bar"
         //   onClick={() => {
@@ -92,13 +89,13 @@ export default function Card({ video,videos,setvideos }) {
             alt=""
           />
           <div className="details">
-            <img src={user&&( user.img == "" ? blankUSer : user.img)} alt="" />
+            <img src={user && (user.img == "" ? blankUSer : user.img)} alt="" />
             <div className="texts">
               <h1 style={{ margin: "0" }}>{video.title}</h1>
-              <h2>{user&& user.name}</h2>
-              <div className="info">{`${video.viedeoViewUsers.length} views - ${format(
-                video.createdAt
-              )} `}</div>
+              <h2>{user && user.name}</h2>
+              <div className="info">{`${
+                video.viedeoViewUsers.length
+              } views - ${format(video.createdAt)} `}</div>
             </div>
           </div>
         </div>

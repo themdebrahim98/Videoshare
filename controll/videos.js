@@ -5,7 +5,7 @@ import User from "../model/User.js";
 import Videos from "../model/Videos.js";
 
 export const addVideo = async (req, res, next) => {
-  console.log(req.params)
+  console.log(req.params);
   try {
     const video = new Videos({
       userId: req.user.id,
@@ -57,7 +57,7 @@ export const updateVideo = async (req, res, next) => {
 };
 
 export const getVideo = async (req, res, next) => {
-  console.log("fetvideo")
+  console.log("fetvideo");
   try {
     const video = await Videos.findById(req.params.id);
 
@@ -76,7 +76,7 @@ export const viewVideo = async (req, res, next) => {
     if (!isView) {
       const updatedvideo = await Videos.findByIdAndUpdate(
         req.params.videoId,
-        { $addToSet:{viedeoViewUsers:req.user.id} },
+        { $addToSet: { viedeoViewUsers: req.user.id } },
         { new: true }
       );
 
@@ -99,11 +99,10 @@ export const randomVideo = async (req, res, next) => {
 };
 
 export const trendingVideo = async (req, res, next) => {
-  console.log("trend")
+  console.log("trend");
   try {
- 
-    const trend = await Videos.find().sort({ viedeoViewUsers: -1 });
-    res.cookie("ok","kljjkhhjkjkbhjgb")
+    const trend = await Videos.find().sort({viedeoViewUsers:-1});
+    res.cookie("ok", "kljjkhhjkjkbhjgb");
 
     res.status(200).json(trend);
   } catch (err) {
@@ -116,7 +115,7 @@ export const subVideo = async (req, res, next) => {
     const user = await User.findById(req.user.id);
     const videos = await Promise.all(
       user.subscribedUsers.map((channelid) => {
-        return Videos.find({ userId: channelid });
+        return Videos.find({ userId: channelid }).sort({ createdAt: -1 });
       })
     );
 
@@ -130,9 +129,11 @@ export const subVideo = async (req, res, next) => {
 
 export const getVideoByTag = async (req, res, next) => {
   try {
-    console.log(req.query);
-    const tags = req.query.tags.split('+')
-    const videos = await Videos.find({tags:{$in:tags} }).limit(40);
+    const tags = req.query.tags.split("+");
+    console.log(tags);
+    const videos = await Videos.find({ tags: { $in: tags } })
+      .limit(40)
+      .sort({ createdAt: -1 });
 
     res.status(200).json(videos);
   } catch (err) {
@@ -142,8 +143,12 @@ export const getVideoByTag = async (req, res, next) => {
 
 export const searchVideo = async (req, res, next) => {
   try {
-   const query = req.query.q;
-   const searchVideo = await Videos.find({ desc:{$regex:query,$options:"i"}});
+    console.log(req.query);
+    let query = req.query.q.trim();
+    console.log(query);
+    const searchVideo = await Videos.find({
+      title: { $regex: query, $options: "isg" },
+    });
 
     res.status(200).json(searchVideo);
   } catch (err) {
@@ -151,11 +156,12 @@ export const searchVideo = async (req, res, next) => {
   }
 };
 
-
 export const channelVideos = async (req, res, next) => {
-  console.log("delete")
+  console.log("delete");
   try {
-    const videos = await Videos.find({userId: req.user.id}).sort({"createdAt":-1});
+    const videos = await Videos.find({ userId: req.user.id }).sort({
+      createdAt: -1,
+    });
     if (!videos) return next(createError(404, "video not found"));
     res.status(200).json(videos);
   } catch (err) {

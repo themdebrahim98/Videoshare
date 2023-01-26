@@ -1,54 +1,69 @@
-
-.navbar{
-    position: sticky;
-    top: 15px;
-    z-index: 5;
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background-color: #0f0f0f;
+  margin: 0;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 9px;
 }
-.navbar .wrapper{
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    position: relative;
-    
-}
-
-.navbar .wrapper .search{
-    width: 50%;
-    display: flex;
-    align-items: center;
-    margin: 0 auto;
-    text-align: center;
-    justify-content: space-between;
-    border-radius: 15px;
-    padding: 8px;
-    border: 1px solid #eee;
-    background-color: #181818;
-
-}
-.navbar .search input{
-    background: transparent;
-    border: none;
-    outline: none;
-    width: 100%;
-    color: white;
-    font-size: 16px;
-}
-.navbar .search .searchIcon{
-    background-color: #373737;
-    width: 75px;
-    line-height: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    cursor: pointer;
+.navbar .wrapper {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  position: relative;
+  width: 100%;
 }
 
-.navbar .wrapper  .signbtn Button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+.navbar .wrapper .bar :hover {
+  border-radius: 100%;
+  padding: 8px;
+  background-color: #181818;
+}
+
+.navbar .wrapper .bar .hambarger {
+  cursor: pointer;
+}
+
+.navbar .wrapper .search {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  text-align: center;
+  justify-content: space-between;
+  border-radius: 15px;
+  padding: 8px;
+  border: 1px solid #eee;
+  background-color: #181818;
+}
+.navbar .search input {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: white;
+  font-size: 16px;
+}
+.navbar .search .searchIcon {
+  background-color: #373737;
+  width: 75px;
+  line-height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.navbar .wrapper .signbtn Button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 /* .navbar .wrapper .googlebtn{
@@ -59,10 +74,10 @@
     padding: 8px;
     text-align: center;
 } */
-.navbar .wrapper .user{
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    align-items: center;
-    padding-right: 45px;
+.navbar .wrapper .user {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+  padding-right: 45px;
 }

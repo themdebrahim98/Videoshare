@@ -17,7 +17,7 @@ export const signup = async (req, res, next) => {
 };
 
 export const signin = async (req, res, next) => {
-  console.log("ok")
+  console.log("ok");
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) return next(createError(404, "user not found"));
@@ -28,54 +28,41 @@ export const signin = async (req, res, next) => {
     if (!isCorrectPass) {
       return next(createError(400, "wrong credentials"));
     } else {
-
-      const token = jwt.sign({id:user._id},process.env.SECRETKEY)
-      res.cookie("user-token",token,{
-        
-      }).status(200).json(user);
-      
-      
+      const token = jwt.sign({ id: user._id }, process.env.SECRETKEY);
+      res.cookie("user-token", token, {}).status(200).json(user);
     }
   } catch (err) {
     next(err);
   }
 };
 
-export const google = async (req,res,next) => {
+export const google = async (req, res, next) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     const user = await User.findOne({ email: req.body.email });
-    if(user){
-      const token = jwt.sign({id:user._id},process.env.SECRETKEY)
-      res.cookie("user-token",token).status(200).json(user._doc);
-
-    }else{
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.SECRETKEY);
+      res.cookie("user-token", token).status(200).json(user._doc);
+    } else {
       const newUSer = new User({
         ...req.body,
-        fromGoogle:true
-      })
+        fromGoogle: true,
+      });
 
       const savedUser = await newUSer.save();
-      res.cookie("user-token",token).status(200).json(savedUser._doc);
-
+      res.cookie("user-token", token).status(200).json(savedUser._doc);
     }
-
-    
   } catch (error) {
-    next(error)
-    
+    next(error);
   }
 };
 
-
-
 export const logOut = async (req, res, next) => {
   try {
-    
-    res.clearCookie('user-token')
-    res.send("log out successfullty")
-   
-    next()
+    res.clearCookie("user-token");
+    res.send("log out successfullty");
+
+    next();
   } catch (err) {
     next(err);
   }

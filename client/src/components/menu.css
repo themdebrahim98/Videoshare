@@ -1,56 +1,100 @@
-.App .container .menu{
-    flex: 1.5;
-    background-color: #202020;
-    color: white;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-   
+::-webkit-scrollbar {
+  width: 10px;
 }
 
-.App .container .menu.lightTheme{
-    background-color: white;
-    color: black;
+/* Track */
+::-webkit-scrollbar-track {
+  background: #0f0f0f;
 }
 
-.menu .wrapper{
-    padding: 8px 25px;
-    
-   
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 15px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
-.menu .logo{
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    font-weight: bold;
-    margin-bottom: 25px;
-    font-size: 15px;
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
-.menu .item{
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 15px;
+.App .container .drawer .drawer .menu {
+  flex: 2;
+  background-color: #0f0f0f;
+  color: white;
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  transition: all 0.3s ease-out;
+}
+
+.App .container .drawer .menu.lightTheme {
+  background-color: white;
+  color: black;
+}
+
+.drawer .menu .wrapper {
+  padding: 0px 2px;
+}
+.drawer .menu .wrapper .logowrap {
+  display: flex;
+  gap: 15px;
+  padding: 0 15px;
+  align-items: center;
+  padding-left: 14px;
+  cursor: pointer;
+}
+.drawer .menu .wrapper .logowra p.drawer MenuIcon {
+  font-size: 2rem;
+}
+
+/*  .drawer  .menu .wrapper .bar{
+    position: absolute;
+    top: 8px;
+    right: 5px;
     cursor: pointer;
-    padding: 15px;
+    font-size: 45px;
+    width: 78px;
+    text-align: center;
+} */
+.drawer .menu .wrapper .bar .hambarger > {
+  font-size: 108px;
 }
-.menu .btn Button{
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 5px;
-    background-color: transparent;
-
+.drawer .menu .wrapper .logowrap .logo {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-weight: bold;
+  font-size: 15px;
+}
+.drawer .menu .item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  padding: 15px;
+}
+.drawer .menu .item.activeItem {
+  background-color: #202020;
+  border-radius: 15px;
+}
+.drawer .menu .btn Button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+  background-color: transparent;
 }
 
-.menu .btn{
-    margin-bottom: 8px;
+.drawer .menu .btn {
+  margin-bottom: 8px;
 }
 
-.item:hover{
-    background-color: gray;
-    transition: background-color .5s ease;
-    border-radius: 15px;
+.item:hover {
+  background-color: #202020;
+  border-radius: 15px;
+  transition: background-color 0.5s ease;
 }
-

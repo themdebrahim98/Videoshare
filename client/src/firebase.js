@@ -10,7 +10,7 @@ const firebaseConfig = {
   storageBucket: "video-sharing-app-5afa2.appspot.com",
   messagingSenderId: "744889309963",
   appId: "1:744889309963:web:cc51fda6e0ebc20846a00e",
-  measurementId: "G-KB68SC4PKE"
+  measurementId: "G-KB68SC4PKE",
 };
 
 // Initialize Firebase

@@ -16,11 +16,10 @@ dotenv.config();
 const connect = ()=>{
     mongoose.set('strictQuery', true);
     mongoose.connect(process.env.MONGODB).then(()=>{
-        console.log("database connected successfully")
     }).catch((err)=>{
-        console.log(err.message)
     })
 }
+
 
 
 app.use(cors({

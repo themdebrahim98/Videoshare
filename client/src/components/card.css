@@ -1,61 +1,57 @@
-.card{
-width: 288px;
-height: 300px;
-gap: 8px;
-margin-right: 12px;
-margin-bottom: 12px;
-cursor: pointer;
-text-decoration: none;
-position: relative;
-
-
-
+.card {
+  max-width: 355px;
+  height: 320px;
+  gap: 8px;
+  margin-right: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
 }
 
-.card .wrapper{
-    height: 100%;
-    border-radius: 15px;
-    border: 1px solid #202020;
-    background-color: #202020;
-    
+.card .wrapper {
+  height: 100%;
+  border-radius: 15px;
+  border: 1px solid #202020;
+  background-color: #0f0f0f;
 }
 
-.card  .bar{
-    position: absolute;
-    top: 5px;
-    right: 8px;
+.card .bar {
+  position: absolute;
+  top: 5px;
+  right: 8px;
 }
-.card .wrapper img{
-    height: 180px;
-    width: 100%;
-    border-radius: 15px;
-    object-fit: cover;
-}
-
-.card .details{
-    display: flex;
-    gap: 25px;
-    background-color: transparent;
-    color: white;
-    text-transform: capitalize;
-    margin-top: 15px;
+.card .wrapper img {
+  height: 65%;
+  width: 100%;
+  border-radius: 15px;
+  object-fit: cover;
 }
 
-.card .details .texts h1{
-    font-size: 16px;
-    font-weight: 700;
+.card .details {
+  display: flex;
+  gap: 25px;
+  background-color: transparent;
+  color: white;
+  text-transform: capitalize;
+  margin-top: 15px;
 }
-.texts h2{
-    margin: 5px 0;
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.799);
+
+.card .details .texts h1 {
+  font-size: 16px;
+  font-weight: 700;
 }
-.texts .info{
-    color: rgba(255, 255, 255, 0.733);
+.texts h2 {
+  margin: 5px 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.799);
 }
-.card .details img{
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+.texts .info {
+  color: rgba(255, 255, 255, 0.733);
+}
+.card .details img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }

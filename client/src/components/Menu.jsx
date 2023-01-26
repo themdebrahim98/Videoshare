@@ -9,110 +9,162 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import NightlightIcon from "@mui/icons-material/Nightlight";
 import HistoryIcon from "@mui/icons-material/History";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { Button, Space } from "antd";
+import { Button, Space, Drawer, Radio } from "antd";
 import PersonIcon from "@mui/icons-material/Person";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import { useContext } from "react";
 import { ThemeContext } from "../App.js";
 import { Link } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import {GrChannel} from 'react-icons/gr'
-import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
-
-
+import { GrChannel } from "react-icons/gr";
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
+import { toggleSideBar, toggleButton } from "../redux/sideBarSlice";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function Menu() {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  console.log(theme, "klnkl");
+  const dispatch = useDispatch();
+  const { key } = useSelector((state) => state.sideBar);
+  const { isopen } = useSelector((state) => state.sideBar);
+
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState("right");
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onChange = (e) => {
+    setPlacement(e.target.value);
+  };
+  const onClose = () => {
+    dispatch(toggleSideBar());
+  };
+
+  const handleSideBar = () => {
+    dispatch(toggleSideBar());
+  };
   return (
-    <div className={theme == "dark" ? "menu" : "menu lightTheme"}>
-      <div className="wrapper">
-        <Link
-          to="/"
-          style={{ color: "inherit", textDecoration: "none" }}
-          color="inherit"
-        >
-          <div className="logo">
-            <img src={logo} width="40px" height="50px" alt="" />
-            MD YOUTUBE
+    <Drawer
+      maskClosable={true}
+      style={{ padding: "0", background: "#0f0f0f", color: "white" }}
+      closable={false}
+      className="drawer"
+      placement={"left"}
+      width={350}
+      open={isopen}
+      onClose={onClose}
+    >
+      <div className={theme == "dark" ? "menu" : "menu lightTheme"}>
+        <div className="wrapper">
+          <div className="logowrap">
+            <MenuIcon
+              onClick={() => {
+                dispatch(toggleSideBar());
+              }}
+            />
+            <Link
+              to="/"
+              style={{ color: "inherit", textDecoration: "none" }}
+              color="inherit"
+            >
+              <div className="logo">
+                <img src={logo} width="40px" height="50px" alt="" />
+                VIDEO SHARE
+              </div>
+            </Link>
           </div>
-        </Link>
 
-        <Link
-          to="/"
-          style={{ color: "inherit", textDecoration: "none" }}
-          color="inherit"
-        >
-          <div className="item">
-            <HomeIcon />
-            Home
-          </div>
-        </Link>
-
-        <Link
-          to="video/trend"
-          style={{ color: "inherit", textDecoration: "none" }}
-          color="inherit"
-        >
-          <div className="item">
-            <ExploreIcon />
-            Trend
-          </div>
-        </Link>
-
-        <Link
-          to="/video/sub"
-          style={{ color: "inherit", textDecoration: "none" }}
-          color="inherit"
-        >
-          <div className="item">
-            <SubscriptionsIcon />
-            Subscription
-          </div>
-        </Link>
-
-        <Link
-          to="video/allvideos"
-          style={{ color: "inherit", textDecoration: "none" }}
-          color="inherit"
-        >
-          <div className="item">
-            <VideoLibraryIcon />
-            My Own Videos
-          </div>
-        </Link>
-        <hr style={{ margin: "18px 0", border: "1px solid #373737" }} />
-        <div className="item">
-          <LibraryAddCheckIcon />
-          Library
-        </div>
-        <div className="item">
-          <HistoryIcon />
-          History
-        </div>
-        <div className="item">
-          <SettingsIcon />
-          Setting
-        </div>
-        <hr style={{ margin: "18px 0", border: "1px solid #373737" }} />
-        {/* <div className="btn">
-          Sign in to like, comment to videos
           <Link
-            to="/signin"
-            style={{ textDecoration: "none", color: "inherit" }}
+            onClick={handleSideBar}
+            to="/"
+            style={{ color: "inherit", textDecoration: "none" }}
+            color="inherit"
           >
-            <Button type="primary" ghost icon={ <AccountCircleIcon />}>
-              SIGN IN
-            </Button>
+            <div
+              className={key == 1 ? "item activeItem" : "item"}
+              onClick={() => dispatch(toggleButton(1))}
+            >
+              <HomeIcon />
+              Home
+            </div>
           </Link>
-        </div> */}
-        {/* <hr style={{ margin: "18px 0", border: "1px solid #373737" }} /> */}
 
-        <div className={"item toogle"} onClick={toggleTheme}>
-          <Brightness4Icon />
-          Mode
+          <Link
+            onClick={handleSideBar}
+            to="video/trend"
+            style={{ color: "inherit", textDecoration: "none" }}
+            color="inherit"
+          >
+            <div
+              className={key == 2 ? "item activeItem" : "item"}
+              onClick={() => dispatch(toggleButton(2))}
+            >
+              <ExploreIcon />
+              Trend
+            </div>
+          </Link>
+
+          <Link
+            onClick={handleSideBar}
+            to="/video/sub"
+            style={{ color: "inherit", textDecoration: "none" }}
+            color="inherit"
+          >
+            <div
+              className={key == 3 ? "item activeItem" : "item"}
+              onClick={() => dispatch(toggleButton(3))}
+            >
+              <SubscriptionsIcon />
+              Subscription
+            </div>
+          </Link>
+
+          <Link
+            onClick={handleSideBar}
+            to="video/allvideos"
+            style={{ color: "inherit", textDecoration: "none" }}
+            color="inherit"
+          >
+            <div
+              className={key == 4 ? "item activeItem" : "item"}
+              onClick={() => dispatch(toggleButton(4))}
+            >
+              <VideoLibraryIcon />
+              My Own Videos
+            </div>
+          </Link>
+          <hr style={{ margin: "18px 0", border: "1px solid #373737" }} />
+          <div
+            onClick={handleSideBar}
+            className={key == 5 ? "item activeItem" : "item"}
+            onClick={() => dispatch(toggleButton(5))}
+          >
+            <LibraryAddCheckIcon />
+            Library
+          </div>
+          <div
+            onClick={handleSideBar}
+            className={key == 6 ? "item activeItem" : "item"}
+            onClick={() => dispatch(toggleButton(6))}
+          >
+            <HistoryIcon />
+            History
+          </div>
+          <div
+            onClick={handleSideBar}
+            className={key == 7 ? "item activeItem" : "item"}
+            onClick={() => dispatch(toggleButton(7))}
+          >
+            <SettingsIcon />
+            Setting
+          </div>
+          <hr style={{ margin: "18px 0", border: "1px solid #373737" }} />
         </div>
       </div>
-    </div>
-  );
+    </Drawer>
+
+      );
 }

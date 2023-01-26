@@ -4,11 +4,12 @@ import "./comments.css";
 import Comment from "./Comment";
 import axios from "axios";
 import { async } from "@firebase/util";
-
+import { useSelector } from "react-redux";
 export default function Comments({ videoId }) {
   const [comments, setcomments] = useState([]);
   const [comment, setcomment] = useState({});
   const inputRef = useRef();
+  let { currUser } = useSelector((state) => state.user);
 
   const sortComment = (comments) => {
     comments.sort((a, b) => b.createdAt - a.createdAt);
@@ -29,7 +30,6 @@ export default function Comments({ videoId }) {
         { withCredentials: true }
       );
 
-      console.log(res, "comment");
       inputRef.current.value = "";
       const getComments = async () => {
         const res = await axios.get(
@@ -37,7 +37,6 @@ export default function Comments({ videoId }) {
         );
 
         setcomments(res.data);
-        console.log(res.data);
       };
       getComments();
     } catch (error) {
@@ -52,7 +51,6 @@ export default function Comments({ videoId }) {
       );
 
       setcomments(res.data);
-      console.log(res.data);
     };
     getComments();
   }, [videoId]);
@@ -61,7 +59,7 @@ export default function Comments({ videoId }) {
     <div className="comments">
       <div className="newComment">
         <div className="avatar">
-          <img src={"j"} alt="" />
+          <img src={currUser && currUser.img} alt="" />
         </div>
         <input
           ref={inputRef}

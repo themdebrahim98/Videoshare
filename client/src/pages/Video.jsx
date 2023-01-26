@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./video.css";
 import Card from "../components/Card";
-import { Button, Space, Tooltip,Alert,message } from "antd";
+import { Button, Space, Tooltip, Alert, message } from "antd";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
@@ -21,6 +21,7 @@ import {
 import { format } from "timeago.js";
 import { async } from "@firebase/util";
 import { subscribe } from "../redux/userSlice";
+import Reccommendation from "../components/Reccommendation";
 
 export default function Video() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -30,11 +31,9 @@ export default function Video() {
   let { currUser } = useSelector((state) => state.user);
 
   const path = useLocation().pathname.split("/")[2];
-  console.log(path);
 
   const warning = () => {
-    message.error("You are not authorized!")
-    
+    message.error("You are not authorized!");
   };
 
   const handleLike = async (e) => {
@@ -47,9 +46,10 @@ export default function Video() {
         }
       );
       distpatch(like(currUser && currUser._id));
-      console.log(res.data);
     } catch (error) {
-      message.warning("You are not authorized!, please sign in to like, comment ");
+      message.warning(
+        "You are not authorized!, please sign in to like, comment "
+      );
     }
   };
 
@@ -64,8 +64,9 @@ export default function Video() {
       );
       distpatch(dislike(currUser && currUser._id));
     } catch (error) {
-      message.warning("You are not authorized!, please sign in to like, comment ");
-
+      message.warning(
+        "You are not authorized!, please sign in to like, comment "
+      );
     }
   };
 
@@ -80,7 +81,6 @@ export default function Video() {
           }
         );
         distpatch(subscribe(channel._id));
-        console.log(res.data);
       } else {
         let res = await axios.put(
           `http://localhost:8800/api/user/unsub/${channel._id}`,
@@ -90,23 +90,13 @@ export default function Video() {
           }
         );
         distpatch(subscribe(channel._id));
-        console.log(res.data);
       }
     } catch (error) {
-      message.warning("You are not authorized!, please sign in to like, comment ");
+      message.warning(
+        "You are not authorized!, please sign in to like, comment "
+      );
     }
   };
-
-  useEffect(() => {
-    const viewVideo = async () => {
-      await axios.put(`http://localhost:8800/api/video/view/${path}`, null, {
-        withCredentials: true,
-      });
-    };
-    console.log("call");
-
-    viewVideo();
-  }, []);
 
   useEffect(() => {
     try {
@@ -118,11 +108,12 @@ export default function Video() {
             null,
             { withCredentials: true }
           );
-        } catch (error) {}
+        } catch (error) {
+          message.warning("nauthorized!,please sign in to like,comment etc.");
+        }
         const videoRes = await axios.get(
           `http://localhost:8800/api/video/find/${path}`
         );
-        console.log(videoRes, "video");
         const channelRes = await axios.get(
           `http://localhost:8800/api/user/find/${videoRes.data.userId}`
         );
@@ -131,7 +122,6 @@ export default function Video() {
       };
       findVideo();
     } catch (err) {
-      console.log(err);
       distpatch(fetchFaliure());
     }
   }, [path, distpatch, currUser && currUser.subscribedUsers]);
@@ -203,8 +193,9 @@ export default function Video() {
       <div className="recommendedWrapper">
         <h1 style={{ margin: "5px 5px" }}>Recommended</h1>
 
+        <Reccommendation tags={currVideo && currVideo.tags} />
         {/* <Card /> e   
-        <Card />
+        // <Card />
         <Card />
         <Card />
         <Card />

@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, message } from "antd";
 import React, { useState, useEffect } from "react";
 import "./upload.css";
 import {
@@ -23,22 +23,37 @@ export default function Upload({ setopen }) {
   const [imagePercetage, setimagePercetage] = useState(0);
   const navigate = useNavigate();
   const handleUpload = async (e) => {
-    const res = await axios.post(
-      "http://localhost:8800/api/video",
-      { ...inputs, tags: tags },
-      { withCredentials: true }
-    );
-    console.log("uploaded new video");
-    alert("upload sucsessfully ");
-    navigate("/video/trend");
-    setopen(false);
+    try {
+      const res = await axios.post(
+        "http://localhost:8800/api/video",
+        { ...inputs, tags: tags },
+        { withCredentials: true }
+      );
+      navigate("/video/trend");
+      message.success("Video uploaded sucsessfully");
+      setopen(false);
+    } catch (error) {
+      message.error("Video not uploaded!");
+    }
   };
-  useEffect(() => {
-    video && uploadFile(video, "videoUrl");
-  }, [video]);
-  useEffect(() => {
-    image && uploadFile(image, "imgUrl");
-  }, [image]);
+  const videoHandle = (e) => {
+    try {
+      video && uploadFile(video, "videoUrl");
+      // message.success("video  uploaded succsessfully")
+    } catch (error) {}
+  };
+  const thumbanailHandle = (e) => {
+    try {
+      image && uploadFile(image, "imgUrl");
+      // message.success("Thumbanail uploaded succsessfully")
+    } catch (error) {}
+  };
+  // useEffect(() => {
+  //   video && uploadFile(video, "videoUrl");
+  // }, [video]);
+  // useEffect(() => {
+  //   image && uploadFile(image, "imgUrl");
+  // }, [image]);
 
   const handleChange = (e) => {
     setinputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -59,10 +74,8 @@ export default function Upload({ setopen }) {
           : setimagePercetage(progress);
         switch (snapshot.state) {
           case "paused":
-            console.log("Upload is paused");
             break;
           case "running":
-            console.log("Upload is running");
             break;
         }
       },
@@ -71,6 +84,11 @@ export default function Upload({ setopen }) {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          message.success(
+            `${
+              typeUrl != "imgUrl" ? "Video" : "Thumbanail"
+            } uploaded succsessfully`
+          );
           setinputs((prev) => ({ ...prev, [typeUrl]: downloadURL }));
         });
       }
@@ -81,19 +99,10 @@ export default function Upload({ setopen }) {
     settags(e.target.value.split(","));
   };
 
-  const onSearch = (value) => console.log(value, "ok");
-
-  // useEffect(() => {
-  //   video && uploadFile(video, "videoUrl");
-  // }, [video]);
-
-  // useEffect(() => {
-  //   image && uploadFile(image, "imgUrl");
-  // }, [image]);
+  
 
   return (
     <div className="upload">
-      {console.log(videoPercentege)}
       <div className="uploadWrapper">
         <div className="close" onClick={() => setopen(false)}>
           X
@@ -106,6 +115,7 @@ export default function Upload({ setopen }) {
         ) : (
           <div className="input">
             <Search
+              style={{ width: "100%" }}
               onChange={(e) => setvideo(e.target.files[0])}
               type="file"
               name="video"
@@ -114,10 +124,7 @@ export default function Upload({ setopen }) {
               size="large"
               enterButton="upload"
               placeholder="input search text"
-              onSearch={onSearch}
-              style={{
-                width: 200,
-              }}
+              onSearch={videoHandle}
             />
             {/* <input
               onChange={(e) => setvideo(e.target.files[0])}
@@ -158,22 +165,18 @@ export default function Upload({ setopen }) {
           <Progress percent={imagePercetage} />
         ) : (
           <>
-            <Space>
-              <Search
-                onChange={(e) => setimage(e.target.files[0])}
-                id="thumbanail"
-                accept="image/*"
-                name="img"
-                type="file"
-                size="large"
-                enterButton="upload"
-                placeholder="input search text"
-                onSearch={onSearch}
-                style={{
-                  width: 200,
-                }}
-              />
-            </Space>
+            <Search
+              style={{ width: "100%" }}
+              onChange={(e) => setimage(e.target.files[0])}
+              id="thumbanail"
+              accept="image/*"
+              name="img"
+              type="file"
+              size="large"
+              enterButton="upload"
+              placeholder="input search text"
+              onSearch={thumbanailHandle}
+            />
 
             {/* <input
               onChange={(e) => setimage(e.target.files[0])}
