@@ -12,6 +12,7 @@ import axios from "axios";
 import { Progress } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Input, Space } from "antd";
+import { hostname } from "../util";
 const { Search } = Input;
 const { TextArea } = Input;
 export default function Upload({ setopen }) {
@@ -25,7 +26,7 @@ export default function Upload({ setopen }) {
   const handleUpload = async (e) => {
     try {
       const res = await axios.post(
-        "http://localhost:8800/api/video",
+        `${hostname}/video`,
         { ...inputs, tags: tags },
         { withCredentials: true }
       );

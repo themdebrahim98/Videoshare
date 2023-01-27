@@ -8,6 +8,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import app from "../firebase";
 import { Button, Space, message } from "antd";
 import { FcGoogle } from "react-icons/fc";
+import { hostname } from "../util";
 
 export default function Signin() {
   const [loginInputDatas, setloginInputDatas] = useState({
@@ -15,9 +16,9 @@ export default function Signin() {
     email: null,
   });
   const [signUpInputDatas, setsignUpInputDatas] = useState({
-    passward: null,
-    email: null,
-    name: null,
+    passward: "",
+    email: '',
+    name: '',
   });
 
   const loginWithgoogle = async (e) => {
@@ -29,7 +30,7 @@ export default function Signin() {
       .then(async (result) => {
         try {
           const res = await axios.post(
-            "http://localhost:8800/api/auth/google",
+            `${hostname}/auth/google`,
             {
               name: result.user.displayName,
               email: result.user.email,
@@ -74,7 +75,7 @@ export default function Signin() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8800/api/auth/signup",
+        `${hostname}/auth/signup`,
         signUpInputDatas,
         {
           withCredentials: true,
@@ -94,7 +95,7 @@ export default function Signin() {
     try {
       dispatch(loginStart());
       const res = await axios.post(
-        "http://localhost:8800/api/auth/signin",
+        `${hostname}/auth/signin`,
         loginInputDatas,
         {
           withCredentials: true,

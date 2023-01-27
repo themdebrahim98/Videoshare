@@ -5,6 +5,7 @@ import Comment from "./Comment";
 import axios from "axios";
 import { async } from "@firebase/util";
 import { useSelector } from "react-redux";
+import {hostname} from '../util.js'
 export default function Comments({ videoId }) {
   const [comments, setcomments] = useState([]);
   const [comment, setcomment] = useState({});
@@ -22,7 +23,7 @@ export default function Comments({ videoId }) {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8800/api/comment",
+        `${hostname}/comment`,
         {
           desc: comment.desc,
           videoId,
@@ -33,7 +34,7 @@ export default function Comments({ videoId }) {
       inputRef.current.value = "";
       const getComments = async () => {
         const res = await axios.get(
-          `http://localhost:8800/api/comment/${videoId}`
+          `${hostname}/comment/${videoId}`
         );
 
         setcomments(res.data);
@@ -47,7 +48,7 @@ export default function Comments({ videoId }) {
   useEffect(() => {
     const getComments = async () => {
       const res = await axios.get(
-        `http://localhost:8800/api/comment/${videoId}`
+        `${hostname}/comment/${videoId}`
       );
 
       setcomments(res.data);

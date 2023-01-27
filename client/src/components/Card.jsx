@@ -9,6 +9,8 @@ import blankUSer from "../images/blankuser.png";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
+import {hostname} from '../util.js'
+
 export default function Card({ video, videos, setvideos }) {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -26,7 +28,7 @@ export default function Card({ video, videos, setvideos }) {
   const handleOk = async () => {
     setConfirmLoading(true);
     const res = await axios.delete(
-      `http://localhost:8800/api/video/${video._id}`,
+      `${hostname}/video/${video._id}`,
       { withCredentials: true }
     );
     navigate("/video/trend");
@@ -49,7 +51,7 @@ export default function Card({ video, videos, setvideos }) {
   useEffect(() => {
     const getUser = async () => {
       const res = await axios.get(
-        `http://localhost:8800/api/user/find/${video.userId}`
+        `${hostname}/user/find/${video.userId}`
       );
       setuser(res.data);
     };

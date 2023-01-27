@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { format } from "timeago.js";
 import "./comment.css";
 import axios from "axios";
-
+import {hostname} from '../util.js'
 export default function Comment({ comment }) {
   const [channel, setchannel] = useState({});
 
@@ -10,7 +10,7 @@ export default function Comment({ comment }) {
     try {
       const fetchComments = async () => {
         const res = await axios.get(
-          `http://localhost:8800/api/user/find/${comment.userId}`
+          `${hostname}/user/find/${comment.userId}`
         );
         setchannel(res.data);
       };

@@ -18,6 +18,7 @@ import { toggleSideBar } from "../redux/sideBarSlice";
 
 import {Input} from 'antd'
 import { Search } from "react-router-dom";
+import { hostname } from "../util";
 
 export default function Navbar() {
   const [open, setopen] = useState(false);
@@ -49,7 +50,7 @@ export default function Navbar() {
       // localStorage.removeItem('persist:root')
       try {
         const res = await axios.post(
-          "http://localhost:8800/api/auth/logout",
+          `${hostname}/auth/logout`,
           null,
           { withCredentials: true }
         );

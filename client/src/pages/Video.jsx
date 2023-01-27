@@ -22,6 +22,7 @@ import { format } from "timeago.js";
 import { async } from "@firebase/util";
 import { subscribe } from "../redux/userSlice";
 import Reccommendation from "../components/Reccommendation";
+import { hostname } from "../util";
 
 export default function Video() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -38,13 +39,9 @@ export default function Video() {
 
   const handleLike = async (e) => {
     try {
-      const res = await axios.put(
-        `http://localhost:8800/api/user/like/${path}`,
-        null,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axios.put(`${hostname}/user/like/${path}`, null, {
+        withCredentials: true,
+      });
       distpatch(like(currUser && currUser._id));
     } catch (error) {
       message.warning(
@@ -56,7 +53,7 @@ export default function Video() {
   const handleDislike = async (e) => {
     try {
       const res = await axios.put(
-        `http://localhost:8800/api/user/dislike/${currVideo._id}`,
+        `${hostname}/user/dislike/${currVideo._id}`,
         null,
         {
           withCredentials: true,
@@ -73,17 +70,13 @@ export default function Video() {
   const handleSubscribe = async (e) => {
     try {
       if (!currUser.subscribedUsers.includes(channel._id)) {
-        let res = await axios.put(
-          `http://localhost:8800/api/user/sub/${channel._id}`,
-          null,
-          {
-            withCredentials: true,
-          }
-        );
+        let res = await axios.put(`${hostname}/user/sub/${channel._id}`, null, {
+          withCredentials: true,
+        });
         distpatch(subscribe(channel._id));
       } else {
         let res = await axios.put(
-          `http://localhost:8800/api/user/unsub/${channel._id}`,
+          `${hostname}/user/unsub/${channel._id}`,
           null,
           {
             withCredentials: true,
@@ -102,20 +95,16 @@ export default function Video() {
     try {
       const findVideo = async () => {
         distpatch(fetchStart());
-        try {
-          const videoView = await axios.put(
-            `http://localhost:8800/api/video/view/${path}`,
-            null,
-            { withCredentials: true }
-          );
-        } catch (error) {
-          message.warning("nauthorized!,please sign in to like,comment etc.");
+
+        if (currUser) {
+          await axios.put(`${hostname}/video/view/${path}`, null, {
+            withCredentials: true,
+          });
         }
-        const videoRes = await axios.get(
-          `http://localhost:8800/api/video/find/${path}`
-        );
+
+        const videoRes = await axios.get(`${hostname}/video/find/${path}`);
         const channelRes = await axios.get(
-          `http://localhost:8800/api/user/find/${videoRes.data.userId}`
+          `${hostname}/user/find/${videoRes.data.userId}`
         );
         setchannel(channelRes.data);
         distpatch(fetchSuccess(videoRes.data));
@@ -138,7 +127,7 @@ export default function Video() {
         <h1 className="title">{currVideo?.title}</h1>
         <div className="details">
           <div className="info">{`  ${
-            currVideo?.viedeoViewUsers.length
+           currVideo && currVideo?.viedeoViewUsers.length
           } views - ${format(currVideo && currVideo.createdAt)}`}</div>
           <div className="btngrp">
             <div className="btn" onClick={handleLike}>

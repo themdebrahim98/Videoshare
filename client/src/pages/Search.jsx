@@ -4,6 +4,7 @@ import axios from "axios";
 import Card from "../components/Card";
 import { useLocation } from "react-router-dom";
 import { message, Row, Col } from "antd";
+import { hostname } from "../util";
 export default function Search() {
   const [searchVideos, setsearchVideos] = useState([]);
   const path = useLocation().search;
@@ -11,7 +12,7 @@ export default function Search() {
     try {
       const searchVideo = async () => {
         const res = await axios.get(
-          `http://localhost:8800/api/video/search${path}`
+          `${hostname}/video/search${path}`
         );
         setsearchVideos(res.data);
       };

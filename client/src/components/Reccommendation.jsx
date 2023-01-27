@@ -4,14 +4,14 @@ import axios from 'axios';
 import Card from '../components/Card'
 import { useLocation } from 'react-router-dom';
 import { message } from 'antd';
-
+import {hostname} from '../util.js'
 export default function Reccommendation({tags}) {
     const tgsString = tags&& tags.join('+')
     const [videos, setvideos] = useState([]);
     useEffect(() => {
         try {
             const searchVideo = async () => {
-               const res = await axios.get(`http://localhost:8800/api/video/tags?tags=${tgsString}`)
+               const res = await axios.get(`${hostname}/video/tags?tags=${tgsString}`)
                setvideos(res.data)
             }
             searchVideo();

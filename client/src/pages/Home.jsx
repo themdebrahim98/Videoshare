@@ -3,6 +3,7 @@ import Card from "../components/Card";
 import axios from "axios";
 import { message, Col, Row } from "antd";
 import { useSelector } from "react-redux";
+import {hostname} from '../util.js'
 export default function Home({ type }) {
   const [videos, setvideos] = useState([]);
   const { isopen } = useSelector((state) => state.sideBar);
@@ -12,15 +13,15 @@ export default function Home({ type }) {
    return sorVideos
   }
 
-  console.log(window.location)
-  let hostUrl = `${window.location.origin}/api/video/${type}`;
-  let testUrl = `http://localhost:8800/api/video/${type}`
+  console.log(hostname)
+  // let hostUrl = `${window.location.origin}/api/video/${type}`;
+  // let testUrl = `http://localhost:8800/api/video/${type}`
   useEffect(() => {
     console.log("use");
 
     const getVideos = async () => {
       try {
-        const res = await axios.get(testUrl, {
+        const res = await axios.get(`${hostname}/video/${type}`, {
           withCredentials: true,
         });
         if(type == 'trend'){
@@ -43,15 +44,16 @@ export default function Home({ type }) {
       {console.log("home")}
 
       {videos.length > 0
-        ? videos.map((video) => (
+        ? videos.map((video, idx) => (
             <Col
+            key={idx}
               xs={{ span: 24 }}
               sm={{ span: 12 }}
               md={{ span: 8 }}
               lg={{ span: 6 }}
             >
               <Card
-                key={video._id}
+                key={idx}
                 video={video}
                 videos={videos}
                 setvideos={setvideos}
