@@ -128,6 +128,7 @@ export const subVideo = async (req, res, next) => {
 };
 
 export const getVideoByTag = async (req, res, next) => {
+  console.log("tag")
   try {
     const tags = req.query.tags.split("+");
     console.log(tags);
