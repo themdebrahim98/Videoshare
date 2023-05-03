@@ -1,6 +1,6 @@
 <h3 align="center">
     <a href="#">
-        <img height="100" src="https://raw.githubusercontent.com/mdebrahim98/Videoshare/master/logo.png" alt="logo" title="Videoshare">
+        <img height="100" src="https://raw.githubusercontent.com/mdebrahim98/Videoshare/main/logo.png" alt="logo" title="Videoshare">
     </a>
 </h1>
 <h3 align="center">
