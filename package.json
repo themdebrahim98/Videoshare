@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "preinstall": "cd client &&  npm install && cd ../ && npm install && cd ../",
-    "build": "npm i && cd client && npm run build && cd ../"
+    "build": "cd client && npm install && npm run build && cd ../ && npm install"
   },
   "keywords": [],
   "author": "",
