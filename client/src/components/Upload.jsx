@@ -15,14 +15,15 @@ import { Input, Space } from "antd";
 import { hostname } from "../util";
 const { Search } = Input;
 const { TextArea } = Input;
-export default function Upload({ setopen }) {
-  const [video, setvideo] = useState(undefined);
-  const [image, setimage] = useState(undefined);
-  const [inputs, setinputs] = useState({});
-  const [tags, settags] = useState(undefined);
-  const [videoPercentege, setvideoPercentege] = useState(0);
-  const [imagePercetage, setimagePercetage] = useState(0);
+export default function Upload({ setopen: setOpen }) {
+  const [video, setVideo] = useState(undefined);
+  const [image, setImage] = useState(undefined);
+  const [inputs, setInputs] = useState({});
+  const [tags, setTags] = useState(undefined);
+  const [videoPercentage, setVideoPercentage] = useState(0);
+  const [imagePercentage, setImagePercentage] = useState(0);
   const navigate = useNavigate();
+
   const handleUpload = async (e) => {
     try {
       const res = await axios.post(
@@ -32,18 +33,20 @@ export default function Upload({ setopen }) {
       );
       navigate("/video/trend");
       message.success("Video uploaded sucsessfully");
-      setopen(false);
+      setOpen(false);
     } catch (error) {
       message.error("Video not uploaded!");
     }
   };
+
   const videoHandle = (e) => {
     try {
       video && uploadFile(video, "videoUrl");
       // message.success("video  uploaded succsessfully")
     } catch (error) {}
   };
-  const thumbanailHandle = (e) => {
+
+  const thumbnailHandle = (e) => {
     try {
       image && uploadFile(image, "imgUrl");
       // message.success("Thumbanail uploaded succsessfully")
@@ -57,7 +60,7 @@ export default function Upload({ setopen }) {
   // }, [image]);
 
   const handleChange = (e) => {
-    setinputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const uploadFile = async (file, typeUrl) => {
@@ -71,8 +74,8 @@ export default function Upload({ setopen }) {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         typeUrl == "videoUrl"
-          ? setvideoPercentege(progress)
-          : setimagePercetage(progress);
+          ? setVideoPercentage(progress)
+          : setImagePercentage(progress);
         switch (snapshot.state) {
           case "paused":
             break;
@@ -90,45 +93,42 @@ export default function Upload({ setopen }) {
               typeUrl != "imgUrl" ? "Video" : "Thumbanail"
             } uploaded succsessfully`
           );
-          setinputs((prev) => ({ ...prev, [typeUrl]: downloadURL }));
+          setInputs((prev) => ({ ...prev, [typeUrl]: downloadURL }));
         });
       }
     );
   };
 
   const handleTags = (e) => {
-    settags(e.target.value.split(","));
+    setTags(e.target.value.split(","));
   };
-
-  
 
   return (
     <div className="upload">
       <div className="uploadWrapper">
-        <div className="close" onClick={() => setopen(false)}>
+        <div className="close" onClick={() => setOpen(false)}>
           X
         </div>
         <h1 className="title">Upload new video</h1>
         <label htmlFor="video">Video: </label>
-
-        {videoPercentege > 0 ? (
-          <Progress percent={videoPercentege} />
+        {videoPercentage > 0 ? (
+          <Progress percent={videoPercentage} />
         ) : (
           <div className="input">
             <Search
               style={{ width: "100%" }}
-              onChange={(e) => setvideo(e.target.files[0])}
+              onChange={(e) => setVideo(e.target.files[0])}
               type="file"
               name="video"
               id="video"
               accept="video/*"
               size="large"
-              enterButton="upload"
+              enterButton="Upload"
               placeholder="input search text"
               onSearch={videoHandle}
             />
             {/* <input
-              onChange={(e) => setvideo(e.target.files[0])}
+              onChange={(e) => setVideo(e.target.files[0])}
               type="file"
               name="video"
               id="video"
@@ -162,13 +162,13 @@ export default function Upload({ setopen }) {
 
         <label htmlFor="thumbanail">Thumbanail: </label>
 
-        {imagePercetage > 0 ? (
-          <Progress percent={imagePercetage} />
+        {imagePercentage > 0 ? (
+          <Progress percent={imagePercentage} />
         ) : (
           <>
             <Search
               style={{ width: "100%" }}
-              onChange={(e) => setimage(e.target.files[0])}
+              onChange={(e) => setImage(e.target.files[0])}
               id="thumbanail"
               accept="image/*"
               name="img"
@@ -176,11 +176,11 @@ export default function Upload({ setopen }) {
               size="large"
               enterButton="upload"
               placeholder="input search text"
-              onSearch={thumbanailHandle}
+              onSearch={thumbnailHandle}
             />
 
             {/* <input
-              onChange={(e) => setimage(e.target.files[0])}
+              onChange={(e) => setImage(e.target.files[0])}
               type="file"
               id="thumbanail"
               accept="image/*"

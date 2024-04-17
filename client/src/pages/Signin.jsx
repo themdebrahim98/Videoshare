@@ -11,14 +11,16 @@ import { FcGoogle } from "react-icons/fc";
 import { hostname } from "../util";
 
 export default function Signin() {
-  const [loginInputDatas, setloginInputDatas] = useState({
-    passward: null,
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [loginInputData, setLoginInputData] = useState({
+    password: null,
     email: null,
   });
-  const [signUpInputDatas, setsignUpInputDatas] = useState({
-    passward: "",
-    email: '',
-    name: '',
+  const [signUpInputData, setSignUpInputData] = useState({
+    password: null,
+    email: null,
+    name: null,
   });
 
   const loginWithgoogle = async (e) => {
@@ -29,6 +31,7 @@ export default function Signin() {
     signInWithPopup(auth, provider)
       .then(async (result) => {
         try {
+          console.log(result, "reslt");
           const res = await axios.post(
             `${hostname}/auth/google`,
             {
@@ -44,6 +47,7 @@ export default function Signin() {
 
           navigate("/");
         } catch (error) {
+          console.log(error);
           message.warning(
             "You are not authorized!, please sign in to like, comment "
           );
@@ -56,58 +60,48 @@ export default function Signin() {
       });
   };
 
-  const navigate = useNavigate();
-
-  const dispatch = useDispatch();
-
   const handleChange = (e) => {
-    setloginInputDatas({ ...loginInputDatas, [e.target.name]: e.target.value });
+    setLoginInputData({ ...loginInputData, [e.target.name]: e.target.value });
   };
 
-  const handleSignUpDatas = (e) => {
-    setsignUpInputDatas({
-      ...signUpInputDatas,
+  const handleSignUpData = (e) => {
+    setSignUpInputData({
+      ...signUpInputData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSignUp = async (e) => {
+  const signUp = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        `${hostname}/auth/signup`,
-        signUpInputDatas,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axios.post(`${hostname}/auth/signup`, signUpInputData, {
+        withCredentials: true,
+      });
       message.success("Sign up succsessfully");
-      setsignUpInputDatas({
+      setSignUpInputData({
         name: null,
         email: null,
-        passward: null,
+        password: null,
       });
     } catch (e) {
       message.warning("please enter correct data ");
+      console.log(e);
     }
   };
+
   const handleLogin = async (e) => {
     try {
       dispatch(loginStart());
-      const res = await axios.post(
-        `${hostname}/auth/signin`,
-        loginInputDatas,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axios.post(`${hostname}/auth/signin`, loginInputData, {
+        withCredentials: true,
+      });
       dispatch(loginSuccess(res.data));
       message.success("login succsessfully ");
 
       navigate("/");
     } catch (e) {
       dispatch(loginFaliure());
-      message.warning(" Please enter correct username and passward! ");
+      message.warning(" Please enter correct username and password! ");
     }
   };
 
@@ -125,10 +119,10 @@ export default function Signin() {
         />
         <input
           onChange={handleChange}
-          placeholder="passward"
-          type="passward"
-          name="passward"
-          id="passward"
+          placeholder="password"
+          type="password"
+          name="password"
+          id="password"
         />
         <button className="btn" onClick={handleLogin}>
           sign in
@@ -141,31 +135,31 @@ export default function Signin() {
 
         <h1 style={{ margin: "8px" }}>or</h1>
         <input
-          onChange={handleSignUpDatas}
-          value={signUpInputDatas.name}
+          onChange={handleSignUpData}
+          value={signUpInputData.name}
           placeholder="name"
           type="text"
           name="name"
           id=""
         />
         <input
-          onChange={handleSignUpDatas}
-          value={signUpInputDatas.email}
+          onChange={handleSignUpData}
+          value={signUpInputData.email}
           placeholder="email"
           type="email"
           name="email"
           id=""
         />
         <input
-          onChange={handleSignUpDatas}
-          value={signUpInputDatas.passward}
-          placeholder="passward"
-          type="passward"
-          name="passward"
+          onChange={handleSignUpData}
+          value={signUpInputData.password}
+          placeholder="password"
+          type="password"
+          name="password"
           id=""
         />
 
-        <button onClick={handleSignUp} className="btn">
+        <button onClick={signUp} className="btn">
           sign up
         </button>
       </div>

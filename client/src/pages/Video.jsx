@@ -106,7 +106,10 @@ export default function Video() {
         const channelRes = await axios.get(
           `${hostname}/user/find/${videoRes.data.userId}`
         );
-        setchannel(channelRes.data);
+        console.log(channelRes, "se");
+        if (channelRes) {
+          setchannel(channelRes.data);
+        }
         distpatch(fetchSuccess(videoRes.data));
       };
       findVideo();
@@ -127,7 +130,7 @@ export default function Video() {
         <h1 className="title">{currVideo?.title}</h1>
         <div className="details">
           <div className="info">{`  ${
-           currVideo && currVideo?.viedeoViewUsers.length
+            currVideo && currVideo?.viedeoViewUsers.length
           } views - ${format(currVideo && currVideo.createdAt)}`}</div>
           <div className="btngrp">
             <div className="btn" onClick={handleLike}>
@@ -157,9 +160,14 @@ export default function Video() {
             <img src={channel && channel.img} alt="" />
 
             <div className="info">
-              <span className="channelTitle"> {`${channel.name} `}</span>
+              <span className="channelTitle">
+                {" "}
+                {`${channel && channel.name} `}
+              </span>
 
-              <span className="channelCount">{`${channel.subscribers} Subscribers`}</span>
+              <span className="channelCount">{`${
+                channel && channel.subscribers
+              } Subscribers`}</span>
             </div>
           </div>
 
@@ -170,7 +178,10 @@ export default function Video() {
               onClick={handleSubscribe}
               style={{ backgroundColor: "red" }}
             >
-              {!(currUser && currUser.subscribedUsers.includes(channel._id))
+              {!(
+                currUser &&
+                currUser.subscribedUsers.includes(channel && channel._id)
+              )
                 ? "SUBSCRIBE"
                 : "SUBSCRIBED"}
             </Button>

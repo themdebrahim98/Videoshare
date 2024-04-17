@@ -16,20 +16,19 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Upload from "./Upload";
 import { toggleSideBar } from "../redux/sideBarSlice";
 
-import {Input} from 'antd'
+import { Input } from "antd";
 import { Search } from "react-router-dom";
 import { hostname } from "../util";
+import { clearVideo } from "../redux/videoSlice";
 
 export default function Navbar() {
   const [open, setopen] = useState(false);
-  const [searchInput, setsearchInput] = useState([])
+  const [searchInput, setsearchInput] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { currUser } = useSelector((state) => state.user);
   let { isopen } = useSelector((state) => state.sideBar);
-  const [q, setq] = useState('');
-
-
+  const [q, setq] = useState("");
 
   const handleSideBar = (e) => {
     dispatch(toggleSideBar());
@@ -47,13 +46,12 @@ export default function Navbar() {
     items,
     onClick: async () => {
       dispatch(logout());
+      dispatch(clearVideo());
       // localStorage.removeItem('persist:root')
       try {
-        const res = await axios.post(
-          `${hostname}/auth/logout`,
-          null,
-          { withCredentials: true }
-        );
+        const res = await axios.post(`${hostname}/auth/logout`, null, {
+          withCredentials: true,
+        });
         message.success("logout sucsessfully.");
         navigate("/signin");
       } catch (error) {
@@ -81,16 +79,18 @@ export default function Navbar() {
             ) : null}
           </div>
           <div className="search">
-           
             <input
-            onChange={(e)=>setq(e.target.value)}
+              onChange={(e) => setq(e.target.value)}
               type="text"
               name="search"
               id="search"
               placeholder="search heare.."
               value={q}
             />
-            <div onClick={()=>navigate(`/video/search?q=${q}`)} className="searchIcon">
+            <div
+              onClick={() => navigate(`/video/search?q=${q}`)}
+              className="searchIcon"
+            >
               <SearchIcon />
             </div>
           </div>

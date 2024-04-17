@@ -7,7 +7,8 @@
     "start": "node index.js",
     "client": "cd client && npm start ",
     "server": "cd server && npm start",
-    "dev": "concurrently \"npm start\" \"npm run client\" "
+    "dev": "concurrently \"npm start\" \"npm run client\" ",
+    "dev2": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -21,16 +22,15 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.22"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mdebrahim98/Videoshare.git"
+    "url": "git+https://github.com/themdebrahim98/Videoshare.git"
   },
   "bugs": {
-    "url": "https://github.com/mdebrahim98/Videoshare/issues"
+    "url": "https://github.com/themdebrahim98/Videoshare/issues"
   },
-  "homepage": "https://github.com/mdebrahim98/Videoshare#readme",
+  "homepage": "https://github.com/themdebrahim98/Videoshare#readme",
   "description": ""
 }
