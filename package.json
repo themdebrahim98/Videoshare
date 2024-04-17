@@ -5,10 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "client": "cd client && npm start ",
-    "server": "cd server && npm start",
-    "dev": "concurrently \"npm start\" \"npm run client\" ",
-    "dev2": "nodemon index.js"
+    "preinstall": "cd client &&  npm install && cd ../ && npm install && cd ../",
+    "build": "npm i && cd client && npm run build && cd ../"
   },
   "keywords": [],
   "author": "",
