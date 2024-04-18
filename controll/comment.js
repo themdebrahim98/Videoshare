@@ -48,7 +48,6 @@ export const updateComment = async (req, res, next) => {
 };
 
 export const getcomment = async (req, res, next) => {
-  console.log("comment");
   try {
     const comments = await Comment.find({ videoId: req.params.id }).sort({
       createdAt: -1,

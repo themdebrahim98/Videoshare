@@ -39,28 +39,28 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/video", videoRoutes);
 app.use("/api/comment", commentRoutes);
-app.use((err, req, res, next) => {
-  const status = err.status || 500;
-  const message = err.message || "something went wrong!";
-  next();
-  return res.status(status).json({
-    success: status,
-    status: status,
-    message: message,
-  });
-});
+// app.use((err, req, res, next) => {
+//   const status = err.status || 500;
+//   const message = err.message || "something went wrong!";
+//   next();
+//   return res.status(status).json({
+//     success: status,
+//     status: status,
+//     message: message,
+//   });
+// });
 
-export function currDir(fileUrl) {
-  const __filename = url.fileURLToPath(fileUrl);
-  return path.dirname(__filename);
-}
-const __dirname = currDir(import.meta.url);
-console.log(__dirname);
+// export function currDir(fileUrl) {
+//   const __filename = url.fileURLToPath(fileUrl);
+//   return path.dirname(__filename);
+// }
+// const __dirname = currDir(import.meta.url);
+// console.log(__dirname);
 
-app.use(express.static(path.join(__dirname, "./client/build")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
+// app.use(express.static(path.join(__dirname, "./client/build")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "./client/build/index.html"));
+// });
 
 app.listen(PORT, () => {
   connect();

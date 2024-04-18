@@ -99,7 +99,10 @@ export default function Navbar() {
             <div className="user">
               <VideoCallIcon
                 style={{ cursor: "pointer" }}
-                onClick={(e) => setopen(true)}
+                onClick={(e) => {
+                  setopen(true);
+                  navigate("/");
+                }}
               />
               <Dropdown.Button
                 menu={menuProps}

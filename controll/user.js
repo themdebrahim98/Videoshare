@@ -3,7 +3,7 @@ import Video from "../model/Videos.js";
 import { createError } from "../error.js";
 import User from "../model/User.js";
 import Videos from "../model/Videos.js";
-import Comment from "../model/Comment.js"
+import Comment from "../model/Comment.js";
 export const updateUSer = async (req, res, next) => {
   try {
     if (req.params.id === req.user.id) {
@@ -12,7 +12,6 @@ export const updateUSer = async (req, res, next) => {
         { $set: req.body },
         { new: true }
       );
-      console.log(user, "knj");
       res.status(200).json(user);
       next();
     } else {
@@ -27,11 +26,13 @@ export const deleteUSer = async (req, res, next) => {
   try {
     if (req.params.id === req.user.id) {
       await User.findByIdAndDelete(req.params.id, { new: true });
-      await Videos.deleteMany({'userId':req.user.id});
-      await Comment.deleteMany({'userId':req.user.id});
-      res.clearCookie("user-token")
+      await Videos.deleteMany({ userId: req.user.id });
+      await Comment.deleteMany({ userId: req.user.id });
+      res.clearCookie("user-token");
 
-      res.status(200).json("succsesfully deleted user and his all data from database");
+      res
+        .status(200)
+        .json("succsesfully deleted user and his all data from database");
       next();
     } else {
       next(createError(401, "you can delete only your account!"));
@@ -100,10 +101,8 @@ export const unSubUser = async (req, res, next) => {
 };
 
 export const like = async (req, res, next) => {
-  console.log("like");
   try {
     const id = req.user.id;
-    console.log(id);
     const videoId = req.params.id;
     await Video.findByIdAndUpdate(videoId, {
       $addToSet: { likes: id },

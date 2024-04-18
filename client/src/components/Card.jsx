@@ -7,9 +7,9 @@ import { useSelector } from "react-redux";
 import blankImg from "../images/blank.jpg";
 import blankUSer from "../images/blankuser.png";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Button, Modal } from "antd";
+import { Button, Modal, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import {hostname} from '../util.js'
+import { hostname } from "../util.js";
 
 export default function Card({ video, videos, setvideos }) {
   const [open, setOpen] = useState(false);
@@ -27,17 +27,11 @@ export default function Card({ video, videos, setvideos }) {
   };
   const handleOk = async () => {
     setConfirmLoading(true);
-    const res = await axios.delete(
-      `${hostname}/video/${video._id}`,
-      { withCredentials: true }
-    );
-    navigate("/video/trend");
-    // const getVideos = async ()=>{
-    //   const res = await axios.get(`http://localhost:8800/api/video/trend`,{withCredentials:true})
-    //   console.log(res.data,"data")
-    //   setvideos(res.data)
-    // }
-    // getVideos()
+    const res = await axios.delete(`${hostname}/video/${video._id}`, {
+      withCredentials: true,
+    });
+    message.success("Video deleted Successfully, Please refresh this page");
+
     if (res.data) {
       setOpen(false);
       setConfirmLoading(false);
@@ -50,9 +44,7 @@ export default function Card({ video, videos, setvideos }) {
 
   useEffect(() => {
     const getUser = async () => {
-      const res = await axios.get(
-        `${hostname}/user/find/${video.userId}`
-      );
+      const res = await axios.get(`${hostname}/user/find/${video.userId}`);
       setuser(res.data);
     };
     getUser();
@@ -60,15 +52,6 @@ export default function Card({ video, videos, setvideos }) {
   return (
     <div className="card">
       {currUser && currUser._id == video.userId ? (
-        // <div
-        //   className="bar"
-        //   onClick={() => {
-        //     console.log("sckjn");
-        //   }}
-        // >
-        //   <MoreVertIcon />
-        // </div>
-
         <div>
           <MoreVertIcon onClick={showModal} className="bar" />
           <Modal
