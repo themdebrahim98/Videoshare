@@ -50,17 +50,17 @@ app.use("/api/comment", commentRoutes);
 //   });
 // });
 
-// export function currDir(fileUrl) {
-//   const __filename = url.fileURLToPath(fileUrl);
-//   return path.dirname(__filename);
-// }
-// const __dirname = currDir(import.meta.url);
-// console.log(__dirname);
+export function currDir(fileUrl) {
+  const __filename = url.fileURLToPath(fileUrl);
+  return path.dirname(__filename);
+}
+const __dirname = currDir(import.meta.url);
+console.log(__dirname);
 
-// app.use(express.static(path.join(__dirname, "./client/build")));
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "./client/build/index.html"));
-// });
+app.use(express.static(path.join(__dirname, "./client/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
 
 app.listen(PORT, () => {
   connect();
