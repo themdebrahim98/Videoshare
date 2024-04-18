@@ -45,14 +45,12 @@ function App() {
     if (haveCookie == "") {
       dispatch(logout());
     }
-    console.log(haveCookie);
   }, []);
 
   return (
     <BrowserRouter>
       <ThemeContext.Provider value={{ theme: theme, toggleTheme }}>
         <div className="App">
-          {console.log("app")}
           <div className="container">
             {isopen && <Menu />}
             <div className={theme == "dark" ? "main" : "main lightTheme"}>

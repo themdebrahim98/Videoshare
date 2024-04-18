@@ -5,7 +5,6 @@ import User from "../model/User.js";
 import Videos from "../model/Videos.js";
 
 export const addVideo = async (req, res, next) => {
-  console.log(req.params);
   try {
     const video = new Videos({
       userId: req.user.id,
@@ -22,12 +21,11 @@ export const addVideo = async (req, res, next) => {
 export const deleteVideo = async (req, res, next) => {
   try {
     const video = await Videos.findById(req.params.videoId);
-    console.log(video, "video");
 
     if (!video) return next(createError(404, "video not found"));
     if (video.userId === req.user.id) {
       await Videos.findByIdAndDelete(req.params.videoId);
-      res.status(200).send("videos succsesfuly deleted.");
+      res.status(200).send("videos successfully deleted.");
     } else {
       return next(createError(404, "you can delete only your video"));
     }
@@ -57,7 +55,6 @@ export const updateVideo = async (req, res, next) => {
 };
 
 export const getVideo = async (req, res, next) => {
-  console.log("fetvideo");
   try {
     const video = await Videos.findById(req.params.id);
 
@@ -99,11 +96,8 @@ export const randomVideo = async (req, res, next) => {
 };
 
 export const trendingVideo = async (req, res, next) => {
-  console.log("trend");
   try {
-    const trend = await Videos.find().sort({viedeoViewUsers:-1});
-    res.cookie("ok", "kljjkhhjkjkbhjgb");
-
+    const trend = await Videos.find().sort({ viedeoViewUsers: -1 });
     res.status(200).json(trend);
   } catch (err) {
     next(err);
@@ -128,10 +122,8 @@ export const subVideo = async (req, res, next) => {
 };
 
 export const getVideoByTag = async (req, res, next) => {
-  console.log("tag")
   try {
     const tags = req.query.tags.split("+");
-    console.log(tags);
     const videos = await Videos.find({ tags: { $in: tags } })
       .limit(40)
       .sort({ createdAt: -1 });
@@ -144,9 +136,7 @@ export const getVideoByTag = async (req, res, next) => {
 
 export const searchVideo = async (req, res, next) => {
   try {
-    console.log(req.query);
     let query = req.query.q.trim();
-    console.log(query);
     const searchVideo = await Videos.find({
       title: { $regex: query, $options: "isg" },
     });
@@ -158,7 +148,6 @@ export const searchVideo = async (req, res, next) => {
 };
 
 export const channelVideos = async (req, res, next) => {
-  console.log("delete");
   try {
     const videos = await Videos.find({ userId: req.user.id }).sort({
       createdAt: -1,

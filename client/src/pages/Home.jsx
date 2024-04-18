@@ -16,12 +16,9 @@ export default function Home({ type }) {
     return sorVideos;
   };
 
-  console.log(hostname);
   // let hostUrl = `${window.location.origin}/api/video/${type}`;
   // let testUrl = `http://localhost:8800/api/video/${type}`
   useEffect(() => {
-    console.log("use");
-
     const getVideos = async () => {
       try {
         const res = await axios.get(`${hostname}/video/${type}`, {

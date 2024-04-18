@@ -17,8 +17,14 @@ const { Search } = Input;
 const { TextArea } = Input;
 export default function Upload({ setopen: setOpen }) {
   const [video, setVideo] = useState(undefined);
+  const [isVideoUploaded, setIsVideoUploaded] = useState(false);
+  const [isThumbnailUploaded, setIsThumbnailUploaded] = useState(false);
   const [image, setImage] = useState(undefined);
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState({
+    title: null,
+    desc: null,
+    tags: null,
+  });
   const [tags, setTags] = useState(undefined);
   const [videoPercentage, setVideoPercentage] = useState(0);
   const [imagePercentage, setImagePercentage] = useState(0);
@@ -26,31 +32,44 @@ export default function Upload({ setopen: setOpen }) {
 
   const handleUpload = async (e) => {
     try {
+      if (!isThumbnailUploaded || !isVideoUploaded) {
+        message.warning("Please first upload video and thumbnail!");
+        return;
+      } else if (!inputs.title || !inputs.tags || !inputs.desc) {
+        message.warning("Please enter all details!");
+        return;
+      }
       const res = await axios.post(
         `${hostname}/video`,
         { ...inputs, tags: tags },
         { withCredentials: true }
       );
-      navigate("/video/trend");
-      message.success("Video uploaded sucsessfully");
+      message.success("Video uploaded successfully");
+      navigate(`/video/${res.data._id}`);
+      setIsThumbnailUploaded(false);
+      setIsVideoUploaded(false);
       setOpen(false);
     } catch (error) {
-      message.error("Video not uploaded!");
+      message.error("Video not uploaded!", error);
     }
   };
 
-  const videoHandle = (e) => {
+  const videoHandle = async (e) => {
     try {
-      video && uploadFile(video, "videoUrl");
-      // message.success("video  uploaded succsessfully")
-    } catch (error) {}
+      if (!video) return;
+      await uploadFile(video, "videoUrl");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const thumbnailHandle = (e) => {
+  const thumbnailHandle = async (e) => {
     try {
-      image && uploadFile(image, "imgUrl");
-      // message.success("Thumbanail uploaded succsessfully")
-    } catch (error) {}
+      if (!image) return;
+      await uploadFile(image, "imgUrl");
+    } catch (error) {
+      console.log(error);
+    }
   };
   // useEffect(() => {
   //   video && uploadFile(video, "videoUrl");
@@ -85,14 +104,19 @@ export default function Upload({ setopen: setOpen }) {
       },
       (error) => {
         // Handle unsuccessful uploads
+        throw error;
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           message.success(
             `${
-              typeUrl != "imgUrl" ? "Video" : "Thumbanail"
-            } uploaded succsessfully`
+              typeUrl != "imgUrl" ? "Video" : "Thumbnail"
+            } Uploaded successfully`
           );
+
+          typeUrl == "imgUrl"
+            ? setIsThumbnailUploaded(true)
+            : setIsVideoUploaded(true);
           setInputs((prev) => ({ ...prev, [typeUrl]: downloadURL }));
         });
       }
@@ -100,7 +124,7 @@ export default function Upload({ setopen: setOpen }) {
   };
 
   const handleTags = (e) => {
-    setTags(e.target.value.split(","));
+    setInputs((prev) => ({ ...prev, tags: e.target.value.split(",") }));
   };
 
   return (
@@ -156,11 +180,11 @@ export default function Upload({ setopen: setOpen }) {
         <Input
           onChange={handleTags}
           type="text"
-          placeholder="seperate tag with comma"
+          placeholder="Separate tag with comma"
           name="tags"
         />
 
-        <label htmlFor="thumbanail">Thumbanail: </label>
+        <label htmlFor="thumbnail">Thumbnail: </label>
 
         {imagePercentage > 0 ? (
           <Progress percent={imagePercentage} />
@@ -169,7 +193,7 @@ export default function Upload({ setopen: setOpen }) {
             <Search
               style={{ width: "100%" }}
               onChange={(e) => setImage(e.target.files[0])}
-              id="thumbanail"
+              id="thumbnail"
               accept="image/*"
               name="img"
               type="file"
@@ -189,8 +213,11 @@ export default function Upload({ setopen: setOpen }) {
           </>
         )}
 
-        <Button type="primary" onClick={handleUpload}>
-          {" "}
+        <Button
+          type="primary"
+          onClick={handleUpload}
+          disabled={!isThumbnailUploaded || !isVideoUploaded}
+        >
           Submit
         </Button>
       </div>

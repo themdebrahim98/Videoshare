@@ -106,7 +106,6 @@ export default function Video() {
         const channelRes = await axios.get(
           `${hostname}/user/find/${videoRes.data.userId}`
         );
-        console.log(channelRes, "se");
         if (channelRes) {
           setchannel(channelRes.data);
         }

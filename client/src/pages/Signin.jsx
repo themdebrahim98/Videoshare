@@ -149,6 +149,7 @@ export default function Signin() {
           type="email"
           name="email"
           id=""
+          required
         />
         <input
           onChange={handleSignUpData}
