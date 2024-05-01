@@ -20,7 +20,7 @@ The Videoshare is a simple video sharing application like YouTube.
 
 ## How to use?
 
-First open the [app](https://relieved-suspenders-ray.cyclic.app/), and then login using email id or your google account. After that, you can upload video, share it and also view other's videos. It also has search functionality to search through all videos. 
+First open the [app](https://videoshare-9qui.onrender.com/), and then login using email id or your google account. After that, you can upload video, share it and also view other's videos. It also has search functionality to search through all videos. 
 
 ## Feedback
 
