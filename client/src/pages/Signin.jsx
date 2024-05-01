@@ -23,41 +23,39 @@ export default function Signin() {
     name: null,
   });
 
-  const loginWithgoogle = async (e) => {
+  const loginWithGoogle = async (e) => {
     dispatch(loginStart());
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        try {
-          console.log(result, "reslt");
-          const res = await axios.post(
-            `${hostname}/auth/google`,
-            {
-              name: result.user.displayName,
-              email: result.user.email,
-              img: result.user.photoURL,
-            },
-            {
-              withCredentials: true,
-            }
-          );
-          dispatch(loginSuccess(res.data));
+    try {
+      const result = await signInWithPopup(auth, provider);
 
-          navigate("/");
-        } catch (error) {
-          console.log(error);
-          message.warning(
-            "You are not authorized!, please sign in to like, comment "
-          );
-        }
+      try {
+        const res = await axios.post(
+          `${hostname}/auth/google`,
+          {
+            name: result.user.displayName,
+            email: result.user.email,
+            img: result.user.photoURL,
+          },
+          {
+            withCredentials: true,
+          }
+        );
 
-        // ...
-      })
-      .catch((error) => {
-        dispatch(loginFaliure());
-      });
+        console.log(res);
+        await dispatch(loginSuccess(res.data));
+        navigate("/");
+      } catch (error) {
+        console.error("Error while sending data to server:", error);
+        message.warning("Error while sending data to server");
+      }
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+      message.warning("Error signing in with Google");
+      dispatch(loginFaliure());
+    }
   };
 
   const handleChange = (e) => {
@@ -77,15 +75,15 @@ export default function Signin() {
       const res = await axios.post(`${hostname}/auth/signup`, signUpInputData, {
         withCredentials: true,
       });
-      message.success("Sign up succsessfully");
       setSignUpInputData({
         name: null,
         email: null,
         password: null,
       });
-    } catch (e) {
-      message.warning("please enter correct data ");
-      console.log(e);
+      message.success(res.data.message);
+    } catch (error) {
+      message.error(error?.response.data.message);
+      console.log(error);
     }
   };
 
@@ -95,13 +93,18 @@ export default function Signin() {
       const res = await axios.post(`${hostname}/auth/signin`, loginInputData, {
         withCredentials: true,
       });
-      dispatch(loginSuccess(res.data));
-      message.success("login succsessfully ");
 
-      navigate("/");
-    } catch (e) {
+      if (res.status === 200) {
+        dispatch(loginSuccess(res.data));
+        message.success("Logged in successfully");
+        navigate("/");
+      }
+    } catch (error) {
+      // Handle network errors or server errors
       dispatch(loginFaliure());
-      message.warning(" Please enter correct username and password! ");
+      if (error.response) {
+        message.error(error.response.data.message);
+      }
     }
   };
 
@@ -109,7 +112,7 @@ export default function Signin() {
     <div className="signin">
       <div className="signinWrapper">
         <h1 className="title">Sign In</h1>
-        <h2 className="subtitle">to continue to Md Dev</h2>
+
         <input
           onChange={handleChange}
           type="text"
@@ -128,7 +131,7 @@ export default function Signin() {
           sign in
         </button>
         <div className="googlebtn">
-          <Button type="primary" icon={<FcGoogle />} onClick={loginWithgoogle}>
+          <Button type="primary" icon={<FcGoogle />} onClick={loginWithGoogle}>
             login with google
           </Button>
         </div>

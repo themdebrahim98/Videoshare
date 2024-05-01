@@ -14,14 +14,14 @@ const PORT = 8800 || process.env.PORT;
 const app = express();
 dotenv.config();
 const connect = () => {
-  //   mongoose.set("strictQuery", true);
+  mongoose.set("strictQuery", true);
   mongoose
     .connect(process.env.MONGODB)
     .then(() => {
       console.log("MongoDB connected");
     })
     .catch((err) => {
-      console.log(err, "DS");
+      console.log("Database not connected!", err, "DS");
     });
 };
 
@@ -40,14 +40,15 @@ app.use("/api/user", userRoutes);
 app.use("/api/video", videoRoutes);
 app.use("/api/comment", commentRoutes);
 // app.use((err, req, res, next) => {
-//   const status = err.status || 500;
-//   const message = err.message || "something went wrong!";
-//   next();
-//   return res.status(status).json({
-//     success: status,
-//     status: status,
-//     message: message,
-//   });
+//   console.log("call");
+//   // const status = err.status || 500;
+//   // const message = err.message || "something went wrong!";
+//   // next();
+//   // return res.status(status).json({
+//   //   success: status,
+//   //   status: status,
+//   //   message: message,
+//   // });
 // });
 
 export function currDir(fileUrl) {

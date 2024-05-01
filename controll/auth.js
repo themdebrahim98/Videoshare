@@ -3,14 +3,23 @@ import User from "../model/User.js";
 import { createError } from "../error.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { json } from "express";
 
 export const signup = async (req, res, next) => {
   try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      res.status(400).json({
+        message: "User already exist, please login!!",
+      });
+    }
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
     const newUser = await new User({ ...req.body, password: hash });
     await newUser.save();
-    res.status(200).send("user has been created");
+    res.status(200).json({
+      message: "User created successfully!",
+    });
   } catch (err) {
     next(err);
     console.log(err);
@@ -20,18 +29,29 @@ export const signup = async (req, res, next) => {
 export const signin = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    if (!user) return next(createError(404, "user not found"));
+
+    if (!user) {
+      return res.status(404).json({ message: "User not exist!." });
+    }
+
+    const isFromGoogle = user?.fromGoogle;
+    if (isFromGoogle) {
+      return res.status(400).json({ message: "Please login with Google." });
+    }
+
     const isCorrectPass = await bcrypt.compare(
       req.body.password,
       user.password
     );
+
     if (!isCorrectPass) {
-      return next(createError(400, "wrong credentials"));
+      res.status(400).json({ message: "Invalid Email and Password!" });
     } else {
       const token = jwt.sign({ id: user._id }, process.env.SECRETKEY);
       res.cookie("user-token", token, {}).status(200).json(user);
     }
   } catch (err) {
+    console.error(err);
     next(err);
   }
 };
